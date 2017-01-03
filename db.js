@@ -24,7 +24,7 @@ function mode(array)
     return maxEl;
 }
 
-
+var averageOfCars;
 
 var ugh;
 // Initialize Firebase
@@ -43,7 +43,7 @@ var ref = database.ref("/trains/data");
 var averageRef = database.ref("/stats/average");
 firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
-        var average;
+
         // User is signed in.
         $(".submitData").click(function () {
             var trainLength = $("#trainLength").val();
@@ -57,10 +57,13 @@ firebase.auth().onAuthStateChanged(function(user) {
             if(isNaN(parseInt(trainLength))){
                 alert("The length of the train must be numerical.");
             }else{
-                if(average > 1 && 660 > parseInt(trainLength) && parseInt(trainLength) < average * 3){
+                if(averageOfCars > 1 && 660 > parseInt(trainLength) && parseInt(trainLength) < averageOfCars * 3){
                     ref.push(trainData);
                 }else{
                     alert("Your data seems.. off");
+                    console.log(average > 1);
+                    console.log(660 > parseInt(trainLength));
+                    console.log(parseInt(trainLength) < averageOfCars * 3);
                 }
 
             }
@@ -83,26 +86,42 @@ function gotAvg(data) {
     // alert(recievedAverage);
     console.log(recievedAverage);
     $(".average").remove();
-    $(".data").prepend("<h2 class='average'> The average train has " + recievedAverage + " cars.");
+    $(".data").append("<h2 class='average'> The average train has " + Math.ceil(recievedAverage) + " cars.");
     console.log('appended avg');
+    averageOfCars = recievedAverage;
 }
 
 function gotData(data) {
+
+    var largestTrain = 0;
+    var smallestTrain = 999;
     trainData = data.val();
     trainKeys = Object.keys(trainData);
     $(".allTrains").html("");
     var trainLengths = [];
     var lengthsTotal = 0;
     var trainLocs = [];
+    $(".carsInfo").remove();
+    $(".loading").remove();
     for(i = 0; i < trainKeys.length; i++){
         var key = trainKeys[i];
         var selData = trainData[key];
         var selLength = selData.length;
         var selLoc = selData.location;
-        $(".allTrains").append("<p>Length: " + selLength + " Cars, Location: " + selLoc);
+        if(parseInt(selLength) > largestTrain){
+            largestTrain = parseInt(selLength);
+            $('.largestTrain').remove();
+            $(".data").append("<h2 class='largestTrain'>The largest train has " + largestTrain + " cars");
+        }else if(parseInt(selLength) < smallestTrain){
+            smallestTrain = selLength;
+            $('.smallestTrain').remove();
+            $(".data").append("<h2 class='smallestTrain'>The smallest train has " + smallestTrain + " cars");
+        }
+
+        $(".allTrains").append("<p class='carsInfo' id='" + key + "'>Length: " + selLength + " Cars, Location: " + selLoc);
         trainLengths.push(parseInt(selLength));
         trainLocs.push(selLoc);
-
+        console.log(selLoc);
     }
     for(i = 0; i < trainLengths.length; i++){
         lengthsTotal += trainLengths[i];
@@ -115,8 +134,10 @@ function gotData(data) {
     averageRef.push(avgDataToUpdate);
     console.log("Pushed local average " + localAverage);
     // alert(localAverage);
-    $(".data").prepend("<h1>" + trainLengths.length + " trains have been logged.");
-    $(".data").append("<h2>" + mode(trainLocs) + " is the most frequently refrenced location");
+    $(".logged").remove();
+    $(".mostRefLoc").remove();
+    $(".data").prepend("<h1 class='logged'>" + trainLengths.length + " trains have been logged.");
+    $(".data").append("<h2 class='mostRefLoc'>" + mode(trainLocs) + " is the most frequently refrenced location");
 
 
 }
