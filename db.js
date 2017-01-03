@@ -86,7 +86,7 @@ function gotAvg(data) {
     // alert(recievedAverage);
     console.log(recievedAverage);
     $(".average").remove();
-    $(".data").append("<h2 class='average'> The average train has " + Math.ceil(recievedAverage) + " cars.");
+    $(".data").append("<h2 class='average'> The average recorded train has " + Math.ceil(recievedAverage) + " cars.");
     console.log('appended avg');
     averageOfCars = recievedAverage;
 }
@@ -111,11 +111,11 @@ function gotData(data) {
         if(parseInt(selLength) > largestTrain){
             largestTrain = parseInt(selLength);
             $('.largestTrain').remove();
-            $(".data").append("<h2 class='largestTrain'>The largest train has " + largestTrain + " cars");
+            $(".data").append("<h2 class='largestTrain'>The largest train recorded has " + largestTrain + " cars");
         }else if(parseInt(selLength) < smallestTrain){
             smallestTrain = selLength;
             $('.smallestTrain').remove();
-            $(".data").append("<h2 class='smallestTrain'>The smallest train has " + smallestTrain + " cars");
+            $(".data").append("<h2 class='smallestTrain'>The smallest train recorded has " + smallestTrain + " cars");
         }
 
         $(".allTrains").append("<p class='carsInfo' id='" + key + "'>Length: " + selLength + " Cars, Location: " + selLoc);
