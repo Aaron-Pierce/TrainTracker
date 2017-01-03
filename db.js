@@ -48,7 +48,8 @@ firebase.auth().onAuthStateChanged(function(user) {
         $(".submitData").click(function () {
             var trainLength = $("#trainLength").val();
             var trainLoc = $("#trainLoc").val();
-
+            $("#trainLength").val("Submitted!");
+            $("#trainLoc").val("Submitted!");
             var trainData = {
                 length: parseInt(trainLength),
                 location: trainLoc
