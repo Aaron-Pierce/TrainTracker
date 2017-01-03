@@ -58,7 +58,7 @@ firebase.auth().onAuthStateChanged(function(user) {
             if(isNaN(parseInt(trainLength))){
                 alert("The length of the train must be numerical.");
             }else{
-                if(averageOfCars > 1 && 660 > parseInt(trainLength) && parseInt(trainLength) < averageOfCars * 3){
+                if(averageOfCars > 1 && 660 > parseInt(trainLength)){
                     ref.push(trainData);
                 }else{
                     alert("Your data seems.. off");
