@@ -48,8 +48,7 @@ firebase.auth().onAuthStateChanged(function(user) {
         $(".submitData").click(function () {
             var trainLength = $("#trainLength").val();
             var trainLoc = $("#trainLoc").val();
-            $("#trainLength").val("Submitted!");
-            $("#trainLoc").val("Submitted!");
+
             var trainData = {
                 length: parseInt(trainLength),
                 location: trainLoc
@@ -58,8 +57,11 @@ firebase.auth().onAuthStateChanged(function(user) {
             if(isNaN(parseInt(trainLength))){
                 alert("The length of the train must be numerical.");
             }else{
-                if(averageOfCars > 1 && 660 > parseInt(trainLength)){
+                if(averageOfCars > 1 && 660 > parseInt(trainLength) && trainLoc.indexOf("<") === -1){
+                    // alert();
                     ref.push(trainData);
+                    $("#trainLength").val("Submitted!");
+                    $("#trainLoc").val("Submitted!");
                 }else{
                     alert("Your data seems.. off");
                     console.log(average > 1);
